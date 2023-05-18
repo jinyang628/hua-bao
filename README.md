@@ -1,0 +1,1 @@
+Everytime update server.js must restart server for the code to be updated. Frontend can be left running.
