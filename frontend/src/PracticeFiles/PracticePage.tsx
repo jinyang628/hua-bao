@@ -2,9 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import ConversationUI from './ConversationUI';
 import '../App.css';
-
-
-
+import videoFile from '../Videos/TestVideo.mp4';
 
 
 function PracticePage() {
@@ -46,9 +44,11 @@ function PracticePage() {
           </div>
           <div className="practice-page-image">
           <div className="practice-page-big-image">
-            <img src="dummy-photo.png" alt="dummy photo" />
+            <video controls className="video">
+              <source src={videoFile} type="video/mp4"/>
+              Your browser does not support the video tag.
+            </video>
             <div className="caption">This is a caption</div>
-
           </div>
           <div className="practice-page-small-images">
           <div className="practice-page-small-image">

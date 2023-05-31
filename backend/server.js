@@ -19,35 +19,24 @@ app.get('/', (req, res) => {
 }); 
 
 app.post('/api/process-audio', async (req, res) => {
-    const userMessage = req.body.audio;
-    const conversationContext = req.body.conversation || [];
+    // const userMessage = req.body.audio;
 
-    const updatedContext = [
-      ...conversationContext,
-      { role: 'user', content: userMessage },
-      { role: 'assistant', content: '' }, // Placeholder for AI response
-      { role: 'system', content: 'Requirements: Speak in chinese', language: 'zh' }
-    ];
-
-    // Construct the message input for OpenAI API
-    const messages = updatedContext.map((message) => ({
-      role: message.role,
-      content: message.content,
-    }));
-
-    // Process the audio and make the OpenAI API call
-    console.log(messages);
-
-    //currently messages aint working as a prompt
+    const userMessage = "我今天很忙。我早上起床后，我没有吃饭就出门了。在路上，我遇到了我朋友。我和她聊天，但是我说话很不流利。她告诉我，我需要练习更多的中文。然后，我买了许多东西去了商店，但是我忘了带钱包。店员很生气，他不给我买东西。我感到非常尴尬"
     try {
       const response = await openai.createCompletion({
         model: 'text-davinci-003',
-        prompt: userMessage,
+        //maybe shove the requirement into the prompt. Search online
+        prompt: 
+        "假设你是个华文老师。请检查以下段落的语法和用词是否正确，并根据情况提出修改意见或将正确的段落写出来:\n" 
+        + userMessage 
+        + "\n 如果段落有语法和用词错误，请提供正确的段落。如果该句子无误，请提供原本的句子。忽略句号。",
         temperature: 0.5,
-        max_tokens: 60,
+        max_tokens: 500,
         top_p: 1.0,
         frequency_penalty: 0.5,
         presence_penalty: 0.0,
+
+        // THIS IS A WRONG PARAMETER U CANNOT SET IT LIKE THIS
         // target_language: 'zh'
       });
   
@@ -68,5 +57,4 @@ app.post('/api/process-audio', async (req, res) => {
 app.listen(port, () => { 
     console.log(`Server is running on port ${port}`); 
 }); 
-  
   

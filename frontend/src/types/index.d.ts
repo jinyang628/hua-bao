@@ -29,3 +29,4 @@ declare global {
     error: string;
   }
 }
+

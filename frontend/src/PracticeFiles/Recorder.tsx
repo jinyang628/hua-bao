@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faRobot } from '@fortawesome/free-solid-svg-icons';
+
 import axios from 'axios'; 
 import Timer from './Timer'
 import logoImage from '../Images/tempLogo.jpg'
@@ -16,6 +19,7 @@ mic.lang = 'zh-CN'
 
 function Recorder() {
 
+  const [chatHistory, setChatHistory] = useState<string[]>([]);
   const [isListening, setIsListening] = useState(false)
   const [audio, setAudio] = useState('')
   const [savedAudio, setSavedAudio] = useState<string[]>([]);
@@ -37,10 +41,6 @@ function Recorder() {
         //do nothing
       }
     }
-    
-    // mic.onstart = () => {
-    //   console.log('Mics on')
-    // }
 
     mic.onresult = event => {
       let transcript = Array.from(event.results)
@@ -50,6 +50,7 @@ function Recorder() {
       transcript = transcript.replace(/[^\u4e00-\u9fa5]/g, '')
       if (transcript) {
         setAudio(transcript);
+        
       }
       mic.onerror = event => {
         console.log(event.error)
@@ -59,18 +60,17 @@ function Recorder() {
 
   const handleSaveAudio = async () => {
     setIsListening(prevState => !prevState)
-    mic.stop()
-
-    console.log(audio);
-  
+    mic.stop()  
     if (audio) {
       // Make a POST request to the backend API endpoint
+      const updatedChatHistoryNewInput = [...chatHistory, audio];
+      setChatHistory(updatedChatHistoryNewInput);
       try {
         const response = await axios.post(apiEndpoint, { audio });
-        console.log("error arrives here");
         const result = response.data.result;
-        console.log(result);
-        setSavedAudio(prevSavedAudio => [...prevSavedAudio, result]); // Append the new response to the existing array
+        const updatedChatHistoryNewOutput = [...updatedChatHistoryNewInput, result];
+        setChatHistory(updatedChatHistoryNewOutput);
+        setSavedAudio(updatedChatHistoryNewOutput); // Append the new response to the existing array (Check if still necessary)
       } catch (error) {
         console.error(error);
       }
@@ -84,7 +84,21 @@ function Recorder() {
         <div className="logo-text">华宝</div>
       </div>
       <div className="conversation-ui-messages">
-        <p>{savedAudio[savedAudio.length - 1]}</p>
+        {chatHistory.map((message, index) => (
+          <div key={index} className="message-container">
+            {index % 2 === 0 && (
+              <FontAwesomeIcon icon={faUser} className="user-image" />
+            )}
+            <div
+              className={`message ${index % 2 === 0 ? 'user-message' : 'api-response'}`}
+            >
+              {message}
+            </div>
+            {index % 2 !== 0 && (
+              <FontAwesomeIcon icon={faRobot} className="ai-image" />
+            )}
+          </div>
+        ))}
       </div>
       <div className="conversation-ui-input">
         <button className="conversation-ui-input-button microphone-button" 

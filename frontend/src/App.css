@@ -30,13 +30,19 @@
 .practice-page-big-image {
   grid-row: 1 / 2;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.practice-page-big-image img {
-  max-width: 100%;
-  max-height: 100%;
+.video {
+  width: 100%;
+  height: auto;
+}
+
+.caption {
+  margin-top: 10px; /* Adjust the margin as needed */
+  text-align: center;
 }
 
 .practice-page-small-images {
@@ -59,6 +65,8 @@
 }
 
 .conversation-ui-container {
+  display: flex;
+  flex-direction: column;
   width: 50%;
 }
 
@@ -74,6 +82,7 @@
 }
 
 .conversation-ui-messages {
+  margin-top: 25px;
   flex-grow: 1;
   overflow-y: scroll;
 }
@@ -152,4 +161,51 @@
 
 .prompt-container {
   margin-right: 10px;
+}
+
+.user-message {
+  background-color: blue;
+  color: #ffffff;
+  padding: 8px;
+  margin-bottom: 4px;
+  text-align: right;
+  border-radius: 8px;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+}
+
+.api-response {
+  background-color: white;
+  color: #000000;
+  padding: 8px;
+  margin-bottom: 4px;
+  border-radius: 8px;
+  display: block; /* Use inline-block instead of inline-flex */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  float: right;
+}
+
+
+.user-image {
+  width: 24px;
+  height: 24px;
+  margin-right: 4px;
+}
+
+.ai-image {
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.video {
+  height: 20vw;
 }
